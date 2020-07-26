@@ -29,13 +29,15 @@ public class BackwardArrayIt implements Iterator<Integer> {
     /**
      * method next() сдвигает указатель итератора в обратном порядке.
      *
-     * @return result.
+     * @return value.
      */
     @Override
     public Integer next() {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        return data[data.length - 1]--;
+        int value = data[data.length - point - 1];
+        point++;
+        return value;
     }
 }
