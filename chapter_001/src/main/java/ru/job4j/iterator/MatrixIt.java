@@ -34,18 +34,18 @@ public class MatrixIt implements Iterator<Integer> {
         this.data = data;
     }
 
-
     @Override
     public boolean hasNext() {
-        /**
+        /*
          * для того, чтоб пропустить возможные "пустые" строки
-         * пока элемент в строке меньше длины строки и элемент строки равен нулю
-         * мы переводим указатель к следующей строке.
+         * пока элемент в строке меньше длины столбца и длина строки равна счетчику колоны,
+         * то счетчик строк увеличивается и перебор начинается с первого элемента.
          */
-        while (row < data.length && data[row].length == 0) {
+        while (row < data.length && data[row].length == column) {
+            column = 0;
             row++;
         }
-        return row < data.length && column < data[row].length;
+        return row < data.length;
     }
 
     @Override
@@ -53,19 +53,10 @@ public class MatrixIt implements Iterator<Integer> {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        /**
+        /*
          * запоминаем текущий элемент
          * и переходим к следующему элементу.
          */
-        int element = data[row][column++];
-        /**
-         * если в столбце больше или равно длине строк,
-         * то мы преходим к следующей строке.
-         */
-        if (column >= data[row].length) {
-            row++;
-            column = 0;
-        }
-        return element;
+        return data[row][column++];
     }
 }
