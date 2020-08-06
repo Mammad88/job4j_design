@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
  * Итератор по массиву, возвращаюший только четные числа.
  *
  * @author Bruki Mammad.
- * @version $1.0$
- * @since 03.08.2020
+ * @version $2.0$
+ * @since 06.08.2020
  */
 public class EvenNumbersIterator implements Iterator<Integer> {
     /**
@@ -32,16 +32,15 @@ public class EvenNumbersIterator implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
-        return this.changeNextIndexEven() == 0;
+        return this.changeNextIndexEven() != -1;
     }
 
     @Override
     public Integer next() {
-        if (this.hasNext()) {
-            return this.numbers[position++];
-        } else {
+        if (!this.hasNext()) {
             throw new NoSuchElementException("Больше нет четных элементов");
         }
+        return this.numbers[position++];
     }
 
     private Integer changeNextIndexEven() {
