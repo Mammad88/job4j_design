@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  * class FlatMap - итератор итераторов.
  *
  * @author Bruki Mammad (bruki.mammad@mail.ru)
- * @version $1.0$
+ * @version $2.0$
  * @since 08.08.2020
  */
 public class FlatMap<T> implements Iterator<T> {
@@ -23,6 +23,7 @@ public class FlatMap<T> implements Iterator<T> {
 
     /**
      * конструктор для инициализаций вложенных итераторов.
+     *
      * @param data - вложенный итератор.
      */
     public FlatMap(Iterator<Iterator<T>> data) {
@@ -31,43 +32,35 @@ public class FlatMap<T> implements Iterator<T> {
     }
 
     /**
-     * определяем есть ли ещё эл-ты в оставшихся итераторах
-     * после работы {@link #check()} данное поле хранит ссылку на гарантированно не пустой
-     * итератор (если null — эл-тов больше нет)
+     * Проверяем, пока итератор в поле {@link #cursor} не имеет элементов, мы передвигаем
+     * указатель на следующий итератор, иначе если есть элементы, мы выходим из цикла.
      *
      * @return true, если есть
      */
     @Override
     public boolean hasNext() {
-        this.check();
-        return this.cursor != null;
+        while (!cursor.hasNext() && data.hasNext()) {
+            cursor = data.next();
+            if (cursor.hasNext()) {
+                break;
+            }
+        }
+        return cursor.hasNext();
     }
 
     /**
      * выдаём следующий элемент, обращаясь к полю {@link #cursor}
      * если эл-тов больше нет — кидаем исключение
      *
-     * @return следующее число
-     * @throws NoSuchElementException если эл-тов не осталось
+     * @return следующее число.
+     * @throws NoSuchElementException если эл-тов не осталось.
      */
     @Override
     public T next() {
         if (!hasNext()) {
-            throw new NoSuchElementException("больше нет Элементов!");
+            throw new NoSuchElementException("больше нет элементов!");
         }
         return cursor.next();
-    }
-
-    /**
-     * проверяем, что итератор в поле {@link #cursor} имеет ещё эл-ты, иначе передвигаем
-     * указатель на следующий итератор (если невозможно — null) и рекурсивно вызываем
-     * метод снова на случай, если след. итератор пуст по дефолту.
-     */
-    private void check() {
-        if (this.cursor != null && !this.cursor.hasNext()) {
-            this.cursor = data.hasNext() ? data.next() : null;
-            this.check();
-        }
     }
 
     public static void main(String[] args) {

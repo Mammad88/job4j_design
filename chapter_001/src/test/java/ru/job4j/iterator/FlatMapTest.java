@@ -14,9 +14,10 @@ import java.util.NoSuchElementException;
  * class FlatMapTest -  тестирование вложенных итераторов.
  *
  * @author Bruki Mammad (bruki.mammad@mail.ru)
- * @version $1.0$
+ * @version $2.0$
  * @since 08.08.2020
  */
+@SuppressWarnings("checkstyle:WhitespaceAround")
 public class FlatMapTest {
 
     @Test
@@ -63,7 +64,7 @@ public class FlatMapTest {
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void whenEmpty() {
+    public void whenNullOrEmpty() {
         Iterator<Iterator<Object>> data = List.of(
                 Collections.emptyIterator()
         ).iterator();
@@ -71,4 +72,3 @@ public class FlatMapTest {
         flat.next();
     }
 }
-
