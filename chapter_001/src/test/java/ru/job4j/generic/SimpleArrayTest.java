@@ -2,8 +2,9 @@ package ru.job4j.generic;
 
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -12,22 +13,26 @@ import static org.junit.Assert.assertThat;
  * Класс для тестирования обертки для массивов.
  *
  * @author Bruki Mammad.
+ * @version $2.0$
+ * @since 14.08.2020
  */
 public class SimpleArrayTest {
+    SimpleArray<Integer> result;
+
     /**
      * Проверка добавление элементов.
      */
     @Test
     public void whenAddElementsThenGetsHis() {
-        SimpleArray<Integer> it = new SimpleArray<>(4);
-        it.add(1);
-        it.add(3);
-        it.add(5);
-        it.add(7);
-        assertThat(it.get(0), is(1));
-        assertThat(it.get(1), is(3));
-        assertThat(it.get(2), is(5));
-        assertThat(it.get(3), is(7));
+        result = new SimpleArray<>(4);
+        result.add(1);
+        result.add(3);
+        result.add(5);
+        result.add(7);
+        assertThat(result.get(0), is(1));
+        assertThat(result.get(1), is(3));
+        assertThat(result.get(2), is(5));
+        assertThat(result.get(3), is(7));
     }
 
     /**
@@ -35,41 +40,39 @@ public class SimpleArrayTest {
      */
     @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void whenAddManyItemsThenErrors() {
-        SimpleArray<Integer> it = new SimpleArray<>(2);
-        it.add(1);
-        it.add(3);
-        it.add(5);
+        result = new SimpleArray<>(2);
+        result.add(1);
+        result.add(3);
+        result.add(5);
     }
 
     /**
-     * прогверка замены элемента по индексу.
+     * проверка замены элемента по индексу.
      */
     @Test
     public void whenSetElementsFromIndexThenEditElement() {
-        SimpleArray<Integer> it = new SimpleArray<>(3);
-        it.add(1);
-        it.add(3);
-        it.add(5);
-        it.set(0, 8);
-        assertThat(it.get(0), is(8));
-        assertThat(it.get(1), is(3));
-        assertThat(it.get(2), is(5));
+        result = new SimpleArray<>(3);
+        result.add(1);
+        result.add(3);
+        result.add(5);
+        result.set(0, 8);
+        assertThat(result.get(0), is(8));
+        assertThat(result.get(1), is(3));
+        assertThat(result.get(2), is(5));
     }
 
     /**
-     * Поверка метода на удаление элемента.
+     * Проверка метода на удаление элемента.
      */
     @Test
     public void whenDeleteElementThenNotHaveHis() {
-        SimpleArray<Integer> it = new SimpleArray<>(3);
-        it.add(2);
-        it.add(4);
-        it.add(6);
-        it.remove(2);
-        assertThat(it.get(0), is(2));
-        assertThat(Objects.checkIndex(0, 2), is(0));
-        assertThat(it.get(1), is(4));
-        assertThat(Objects.checkIndex(1, 2), is(1));
+        result = new SimpleArray<>(3);
+        result.add(2);
+        result.add(4);
+        result.add(6);
+        result.remove(2);
+        assertThat(result.get(0), is(2));
+        assertThat(result.get(1), is(4));
     }
 
     /**
@@ -77,45 +80,32 @@ public class SimpleArrayTest {
      */
     @Test
     public void whenGetIteratorThenHaveIterator() {
-        SimpleArray<Integer> it = new SimpleArray<>(3);
-        it.add(1);
-        it.add(2);
-        it.add(3);
-        Iterator<Integer> iterator = it.iterator();
+        result = new SimpleArray<>(3);
+        result.add(1);
+        result.add(2);
+        result.add(3);
+        Iterator<Integer> iterator = result.iterator();
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.next(), is(1));
-        iterator.remove();
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.next(), is(2));
-        iterator.remove();
         assertThat(iterator.hasNext(), is(true));
         assertThat(iterator.next(), is(3));
         assertThat(iterator.hasNext(), is(false));
-        assertThat(Objects.checkIndex(0, 3), is(0));
-    }
-
-    /**
-     * Тестирование ошибки итератора при двойном удалений подряд.
-     */
-    @Test(expected = IllegalStateException.class)
-    public void whenIteratorRemoveTwoElementThenError() {
-        SimpleArray<Integer> it = new SimpleArray<>(3);
-        it.add(1);
-        it.add(2);
-        it.add(3);
-        Iterator<Integer> iterator = it.iterator();
-        iterator.next();
-        iterator.next();
-        iterator.remove();
-        iterator.remove();
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void whenNotHaveIndexElementThenError() {
-        SimpleArray<Integer> it = new SimpleArray<>(2);
-        it.add(1);
-        it.remove(0);
-        it.set(0, 1);
-        assertThat(Objects.checkIndex(0, 0), is(0));
+        result = new SimpleArray<>(2);
+        result.add(1);
+        result.remove(0);
+        result.set(0, 1);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void whenNullOrEmpty() {
+        Iterator<Object> iterator = Collections.emptyIterator();
+        iterator.next();
+        iterator.next();
     }
 }

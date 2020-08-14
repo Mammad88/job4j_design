@@ -2,27 +2,28 @@ package ru.job4j.generic;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * Обертка над массивом с использованием generic.
  *
  * @param <T> - тип эл-тов массива.
  * @author Bruki mammad.
- * @version $1.0$
+ * @version $2.0$
  * @since 14.08.2020
  */
 public class SimpleArray<T> implements Iterable<T> {
     /**
      * Массив, в котором храним элементы.
      */
-    private Object[] elements;
+    public Object[] elements;
     /**
      * фактический размер массива (также указатель на первую ячейку).
      */
     private int position = 0;
 
     /**
-     * конструктор - задаем при инициализаций необходимое количество ячеек.
+     * Конструктор - задаем при инициализаций необходимое количество ячеек.
      *
      * @param size - количество ячеек.
      */
@@ -49,9 +50,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param model - устанавливаемое значение.
      */
     public void set(int index, T model) {
-        if (index >= position) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, position);
         elements[index] = model;
     }
 
@@ -61,9 +60,7 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param index - индекс ячейки массива.
      */
     public void remove(int index) {
-        if (index >= position) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, position);
         System.arraycopy(elements, index + 1, elements, index, elements.length - index - 1);
         elements[--position] = null;
     }
@@ -71,14 +68,12 @@ public class SimpleArray<T> implements Iterable<T> {
     /**
      * Возвращает элемент, расположенный по указанному индексу.
      *
-     * @param index - индекс ячеки массива.
+     * @param index - индекс ячейки массива.
      * @return значение из ячейки.
      */
     @SuppressWarnings("unchecked")
     public T get(int index) {
-        if (index >= position) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, position);
         return (T) elements[index];
     }
 
@@ -89,10 +84,6 @@ public class SimpleArray<T> implements Iterable<T> {
              * указатель на текущую позицию.
              */
             private int cursor = 0;
-            /**
-             * указатель на только что выданный эл-т (используется для его удаления).
-             */
-            private int lastIndex = -1;
 
             /**
              * определяем наличие неполученных эл-тов по указателю.
@@ -106,7 +97,7 @@ public class SimpleArray<T> implements Iterable<T> {
 
             /**
              * выдаём следующий доступный эл-т, его индексом устанавливаем указатель на удаление,
-             * передвигаем указатель позиции на следующий эл-т
+             * передвигаем указатель позиции на следующий эл-т.
              *
              * @return следующий эл-т.
              * @throws NoSuchElementException если отсутствуют эл-ты к выдаче.
@@ -117,24 +108,7 @@ public class SimpleArray<T> implements Iterable<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                lastIndex = cursor;
                 return (T) elements[cursor++];
-            }
-
-            /**
-             * осуществляем удаление эл-та.
-             * возможно только после получения эл-та чз {@link #next()}, иначе кидаем исключение
-             *
-             * @throws UnsupportedOperationException получение эл-та не предворяет вызов метода
-             */
-            @Override
-            public void remove() {
-                if (lastIndex < 0) {
-                    throw new IllegalStateException();
-                }
-                SimpleArray.this.remove(lastIndex);
-                cursor = lastIndex;
-                lastIndex = -1;
             }
         };
     }
