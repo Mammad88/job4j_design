@@ -9,10 +9,10 @@ import java.util.Objects;
  * Class LinkedContainer - реализация контейнера на базе связанного списка(на подобие LinkedList),
  * контейнер увеличивается по мере добавление элементов в конец  или начало списка.
  *
- * @param <E> - тип эл-тов массива.
+ * @param <E> - тип эл-тов связанного списка.
  * @author Bruki mammad.
- * @version $1.0$
- * @since 27.08.2020
+ * @version $2.0$
+ * @since 01.09.2020
  */
 public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIterator<E> {
 
@@ -36,6 +36,9 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
      */
     private int size = 0;
 
+    /**
+     * конструктор для инициализаций первой и поседней ноды.
+     */
     public LinkedContainer() {
         lastNode = new Node<E>(null, firstNode, null);
         firstNode = new Node<E>(null, null, lastNode);
@@ -91,6 +94,11 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
         return current.getNextElement();
     }
 
+    /**
+     * реализация обратного итератора.
+     *
+     * @return первый элемент.
+     */
     @Override
     public Iterator<E> descendingIterator() {
         return new Iterator<E>() {
@@ -98,7 +106,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
             /**
              * указатель на последний элемент списка.
              */
-            int counter = size - 1;
+            Node<E> node = lastNode;
 
             /**
              * поле хранения начального состояния изменения связанного списка.
@@ -110,7 +118,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return counter >= 0;
+                return node != null;
             }
 
             @Override
@@ -118,11 +126,17 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return getElementByIndex(counter--);
+                node = node.getPrevElement();
+                return node.getCurrentElement();
             }
         };
     }
 
+    /**
+     * реализация итератора по списку.
+     *
+     * @return последний элемент списка.
+     */
     @Override
     public Iterator iterator() {
         return new Iterator() {
