@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @param <E> - тип эл-тов связанного списка.
  * @author Bruki mammad.
- * @version $2.0$
+ * @version $3.0$
  * @since 01.09.2020
  */
 public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIterator<E> {
@@ -81,10 +81,10 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
      * @return найденный индекс связанного списка.
      */
     @Override
-    public E getElementByIndex(int counter) {
-        Objects.checkIndex(counter, size);
+    public E getElementByIndex(int index) {
+        Objects.checkIndex(index, size);
         Node<E> target = firstNode.getNextElement();
-        for (int i = 0; i < counter; i++) {
+        for (int i = 0; i < index; i++) {
             target = getNextElement(target);
         }
         return target.getCurrentElement();
@@ -145,7 +145,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
             /**
              * указатель на текущую позицию.
              */
-            private int counter = 0;
+            private int index = 0;
 
             /**
              * поле хранения начального состояния изменения связанного списка.
@@ -165,7 +165,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return counter < size;
+                return index < size;
             }
 
             /**
@@ -181,7 +181,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return getElementByIndex(counter++);
+                return getElementByIndex(index++);
             }
         };
     }
