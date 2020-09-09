@@ -77,7 +77,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
     /**
      * Возвращает элемент, расположенный по указанному индексу.
      *
-     * @param counter - счетчик искомого индекса в связанном списке.
+     * @param index - счетчик искомого индекса в связанном списке.
      * @return найденный индекс связанного списка.
      */
     @Override
@@ -106,7 +106,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
             /**
              * указатель на последний элемент списка.
              */
-            Node<E> node = lastNode;
+            Node<E> node = lastNode.getPrevElement();
 
             /**
              * поле хранения начального состояния изменения связанного списка.
@@ -126,8 +126,9 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
+                E elem = node.getCurrentElement();
                 node = node.getPrevElement();
-                return node.getCurrentElement();
+                return elem;
             }
         };
     }
