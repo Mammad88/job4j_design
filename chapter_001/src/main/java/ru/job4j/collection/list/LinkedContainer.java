@@ -12,7 +12,7 @@ import java.util.Objects;
  * @param <E> - тип эл-тов связанного списка.
  * @author Bruki mammad.
  * @version $3.0$
- * @since 09.09.2020
+ * @since 10.09.2020
  */
 public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIterator<E> {
 
@@ -139,13 +139,17 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
      * @return последний элемент списка.
      */
     @Override
-    public Iterator iterator() {
-        return new Iterator() {
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
 
             /**
-             * указатель на текущую позицию.
+             * указатель на первую позицию в списке.
              */
-            private int counter = 0;
+            private Node<E> first = firstNode.getNextElement();
+            /**
+             * указатель на список.
+             */
+            private int position = 0;
 
             /**
              * поле хранения начального состояния изменения связанного списка.
@@ -165,7 +169,7 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return counter < size;
+                return position < size;
             }
 
             /**
@@ -181,7 +185,10 @@ public class LinkedContainer<E> implements Linked<E>, Iterable<E>, DescendingIte
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return getElementByIndex(counter++);
+                Node<E> result = first;
+                first = result.getNextElement();
+                position++;
+                return result.getCurrentElement();
             }
         };
     }
