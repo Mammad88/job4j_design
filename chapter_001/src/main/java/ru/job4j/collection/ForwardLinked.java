@@ -2,6 +2,7 @@ package ru.job4j.collection;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
 /**
  * реализация метода delete для односвязного списка.
  *
@@ -9,12 +10,15 @@ import java.util.NoSuchElementException;
  * @version $1.0$
  * @since 01.09.2020
  */
-
 public class ForwardLinked<T> implements Iterable<T> {
+    /**
+     * указатель на первый элемент.
+     */
     private Node<T> head;
 
     /**
      * метод добавление элемента в список.
+     *
      * @param value - добавляемый элемент.
      */
     public void add(T value) {
@@ -31,14 +35,41 @@ public class ForwardLinked<T> implements Iterable<T> {
     }
 
     /**
-     * метод удаление (обнуление ссылки на следующий элемент) в списке.
+     * метод удаление первого элемента в списке.
+     *
+     * @return temp - удаление первого элемента.
      */
-    public void deleteFirst() {
-        Node<T> temp = head;
+    public T deleteFirst() {
         if (head == null) {
             throw new NoSuchElementException();
         }
-        head = temp.next;
+        Node<T> temp = head;
+        head = head.next;
+        temp.next = null;
+        return temp.value;
+
+    }
+
+    /**
+     * Удаляем последний элемент.
+     */
+    public T deleteLast() {
+        T elem = null;
+        if (head == null) {
+            throw new NoSuchElementException();
+        }
+        if (head.next == null) {
+            elem = head.value;
+            head = null;
+        } else {
+            var tail = head;
+            while (tail.next.next != null) {
+                tail = tail.next;
+            }
+            elem = tail.next.value;
+            tail.next = null;
+        }
+        return elem;
     }
 
     @Override
@@ -63,6 +94,17 @@ public class ForwardLinked<T> implements Iterable<T> {
         };
     }
 
+    /**
+     * Переворачиваем односвязный список.
+     */
+    public void revert() {
+        Node<T> revert = null;
+        for (T value : this) {
+            revert = new Node<>(value, revert);
+        }
+        head = revert;
+    }
+
     private static class Node<T> {
         T value;
         Node<T> next;
@@ -72,5 +114,4 @@ public class ForwardLinked<T> implements Iterable<T> {
             this.next = next;
         }
     }
-
 }
