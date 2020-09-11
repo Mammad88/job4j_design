@@ -1,14 +1,14 @@
 package ru.job4j.collection;
-
+/**
+ * создание контейнера Stack на базе связанного списка.
+ *
+ * @author Bruki Mammad.
+ * @version $1.0$
+ * @since 10.09.2020
+ */
 public class SimpleStack<T> {
-    /**
-     * создание контейнера Stack на базе связанного списка.
-     *
-     * @author Bruki Mammad.
-     * @version $1.0$
-     * @since 10.09.2020
-     */
-    private final ForwardLinked<T> linked = new ForwardLinked<T>();
+
+    private final ForwardLinked<T> linked = new ForwardLinked<>();
 
     /**
      * метод pop - возвращает значение и удаляет его из коллекции.
@@ -16,7 +16,7 @@ public class SimpleStack<T> {
      * @return - значение.
      */
     public T pop() {
-        return linked.deleteLast();
+        return linked.removeLast();
     }
 
     /**

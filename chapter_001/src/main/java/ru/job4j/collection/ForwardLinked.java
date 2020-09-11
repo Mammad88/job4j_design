@@ -16,18 +16,19 @@ public class ForwardLinked<T> implements Iterable<T> {
      */
     private Node<T> head;
 
+    private int currentSize;
     /**
      * метод добавление элемента в список.
      *
      * @param value - добавляемый элемент.
      */
     public void add(T value) {
-        Node<T> node = new Node<T>(value, null);
+        var node = new Node<>(value, null);
         if (head == null) {
             head = node;
             return;
         }
-        Node<T> tail = head;
+        var tail = head;
         while (tail.next != null) {
             tail = tail.next;
         }
@@ -37,44 +38,43 @@ public class ForwardLinked<T> implements Iterable<T> {
     /**
      * метод удаление первого элемента в списке.
      *
-     * @return temp - удаление первого элемента.
      */
-    public T deleteFirst() {
+    public T removeFirst() {
         if (head == null) {
             throw new NoSuchElementException();
         }
-        Node<T> temp = head;
+        var temp = head;
         head = head.next;
         temp.next = null;
         return temp.value;
-
     }
 
     /**
-     * Удаляем последний элемент.
+     * метод удаление последнего элемента в списке.
+     * @return текущий элемент.
      */
-    public T deleteLast() {
-        T elem = null;
+    public T removeLast() {
         if (head == null) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("Element cant be deleted");
         }
-        if (head.next == null) {
-            elem = head.value;
-            head = null;
-        } else {
-            var tail = head;
-            while (tail.next.next != null) {
-                tail = tail.next;
-            }
-            elem = tail.next.value;
-            tail.next = null;
+        var current = head;
+        var next = current.next;
+        if (next == null) {
+            currentSize--;
+            return current.value;
         }
-        return elem;
+        while (next.next !=null) {
+            current = next;
+            next = next.next;
+        }
+        current.next = null;
+        currentSize--;
+        return next.value;
     }
 
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
+        return new Iterator<>() {
             Node<T> node = head;
 
             @Override

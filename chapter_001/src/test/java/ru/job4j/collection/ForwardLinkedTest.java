@@ -16,6 +16,10 @@ import static org.junit.Assert.assertThat;
  * @since 10.09.2020
  */
 public class ForwardLinkedTest {
+
+    /**
+     * тестирование метода add - добавление элемента в список.
+     */
     @Test
     public void whenAddThenIt() {
         ForwardLinked<Integer> linked = new ForwardLinked<>();
@@ -26,6 +30,9 @@ public class ForwardLinkedTest {
         assertThat(it.next(), is(2));
     }
 
+    /**
+     * тестирование метода revert - переворачивание связанного списка.
+     */
     @Test
     public void whenAddAndRevertThenIterator() {
         ForwardLinked<Integer> linked = new ForwardLinked<>();
