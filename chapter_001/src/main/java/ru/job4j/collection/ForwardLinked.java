@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  *
  * @author Bruki Mammad.
  * @version $1.0$
- * @since 01.09.2020
+ * @since 12.09.2020
  */
 public class ForwardLinked<T> implements Iterable<T> {
     /**
@@ -60,6 +60,7 @@ public class ForwardLinked<T> implements Iterable<T> {
         var current = head;
         var next = current.next;
         if (next == null) {
+            head = null;
             currentSize--;
             return current.value;
         }
