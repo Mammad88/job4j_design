@@ -3,6 +3,7 @@ package ru.job4j.collection.set;
 import ru.job4j.collection.SimpleArray;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * Class SimpleSet - реализация простого множества на массиве (на подобие hashSet()).
@@ -38,7 +39,7 @@ public class SimpleSet<E> implements Iterable<E> {
     private boolean contains(E e) {
         boolean isContains = false;
         for (E value : data) {
-            if (e.equals(value)) {
+            if (Objects.equals(e, value)) {
                 isContains = true;
                 break;
             }
