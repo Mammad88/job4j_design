@@ -36,4 +36,45 @@ public class TreeTest {
                 is(false)
         );
     }
+
+    /**
+     * Проверка на бинарное дерево.
+     */
+    @Test
+    public void whenAddElBinaryStructureThenBinaryTree() {
+        Tree<Integer> tree = new Tree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(2, 4);
+        tree.add(2, 5);
+        tree.add(5, 6);
+        tree.add(5, 7);
+        tree.add(3, 8);
+        tree.add(3, 9);
+        assertThat(
+                tree.isBinary(),
+                is(true)
+        );
+    }
+
+    /**
+     * Проверка, что дерево не бинарное.
+     */
+    @Test
+    public void whenAddElNotBinaryStructureThenNotBinaryTree() {
+        Tree<Integer> tree = new Tree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(2, 4);
+        tree.add(2, 5);
+        tree.add(5, 6);
+        tree.add(5, 7);
+        tree.add(5, 10);
+        tree.add(3, 8);
+        tree.add(3, 9);
+        assertThat(
+                tree.isBinary(),
+                is(false)
+        );
+    }
 }

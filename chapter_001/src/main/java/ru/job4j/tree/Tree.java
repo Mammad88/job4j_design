@@ -23,7 +23,7 @@ class Tree<E> implements SimpleTree<E> {
      * если значение child есть в дереве, то метод возвращает false.
      *
      * @param parent - значение родителя.
-     * @param child - значение дочернего узла.
+     * @param child  - значение дочернего узла.
      * @return rsl - результат.
      */
     @Override
@@ -53,4 +53,25 @@ class Tree<E> implements SimpleTree<E> {
         }
         return rsl;
     }
+
+    /**
+     * Проверяем, что дерево бинарное.
+     *
+     * @return Бинарное ли дерево.
+     */
+    @Override
+    public boolean isBinary() {
+        boolean binary = true;
+        Queue<Node<E>> data = new LinkedList<>();
+        data.offer(this.root);
+        while (!data.isEmpty()) {
+            Node<E> el = data.poll();
+            if (el.children.size() > 2) {
+                binary = false;
+            }
+            data.addAll(el.children);
+        }
+        return binary;
+    }
 }
+
